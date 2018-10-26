@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   name: foos.bar.com
   labels:
-    app: example1
+    app: {{ .Release.Name }}-crd
     release: {{ .Release.Name }}
 spec:
   group: bar.com
