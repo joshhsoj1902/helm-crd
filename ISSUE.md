@@ -104,3 +104,53 @@ When these two steps are done in order, the second will always fail meaning exis
 
 ### Example 3 - Adding a new version to an existing crd
 
+*This example requires K8s v1.11* I need to test this!!
+
+This example is based off the CRD versioning details found in the [k8s docs](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definition-versioning/)
+
+#### Step 1
+
+Pre-Install chart with V1 of the CRD
+
+```shell
+helm upgrade --install example3 example3/example3a
+```
+
+#### Step 2
+
+Update chart so that it includes and uses the upcoming V2beta1 of the CRD
+
+```shell
+helm upgrade --install example3 example3/example3b
+```
+
+#### Outcome
+
+*TODO*
+
+## Potential workarounds
+
+### Workaround 1 - No crd-install, dedicated crd chart
+
+This is a variation on many examples you see online where install steps will instruct you to install the crd using a `kubectl apply` before running the helm install. Instead it leverages helm. This is useful if multiple CRDs are required.
+
+#### Step 1
+
+Install the crd chart
+
+```shell
+# Install the crd chart
+helm upgrade --install workaround1-crds workaround1/crds
+
+# Install the Ubrella chart
+helm dependency build workaround1/charts
+helm upgrade --install workaround1 workaround1/charts
+```
+
+## TODO
+
+Convert above `Steps` to just be comments in a shell code snippit
+
+Look into and try to create an example using hooks: https://github.com/istio/istio/pull/7771/files
+
+Look into the helm v3 proposal

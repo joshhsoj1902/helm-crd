@@ -1,0 +1,7 @@
+apiVersion: v1
+description: workaround1 - crds
+name: crds
+version: 0.0.1
+keywords:
+sources:
+- https://github.com/joshhsoj1902/helm-crd

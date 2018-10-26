@@ -1,0 +1,6 @@
+dependencies:
+- name: baz
+  repository: file://./baz
+  version: 0.0.1
+digest: sha256:7a04b7c00643d6a064ce75d8e6c1b1ba5c76a187e50f47e1979373782e876aa0
+generated: 2018-10-26T13:54:13.646914-04:00
