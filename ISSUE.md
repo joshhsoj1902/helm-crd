@@ -58,19 +58,11 @@ helm ls --short | xargs -L1 helm delete --purge
 
 In this Example, we have customers already depending on our chart. In a new version of our service we're adding a new CRD.
 
-#### Step 1
-
-Pre-install a chart to simulate a customer already using our chart
-
 ```shell
+# Pre-install a chart to simulate a customer already using our chart
 helm upgrade --install example1 example1/example1a
-```
 
-#### Step 2
-
-A customer updating their existing chart
-
-```shell
+# A customer updating their existing chart
 helm upgrade --install example1 example1/example1b
 ```
 

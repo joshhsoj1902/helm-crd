@@ -1,7 +1,4 @@
 apiVersion: v1
-description: Example1b
 name: example1
 version: 0.0.2
-keywords:
-sources:
-- https://github.com/joshhsoj1902/helm-crd
+

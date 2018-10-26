@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   name: foos.bar.com
   labels:
-    app: example1
+    app: {{ .Release.Name }}-crd
     release: {{ .Release.Name }}
   annotations:
     "helm.sh/hook": crd-install
