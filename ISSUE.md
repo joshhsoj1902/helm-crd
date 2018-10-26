@@ -94,17 +94,11 @@ This example is based off the CRD versioning details found in the [k8s docs](htt
 
 #### Step 1
 
-Pre-Install chart with V1 of the CRD
-
 ```shell
+# Pre-Install chart with V1 of the CRD
 helm upgrade --install example3 example3/example3a
-```
 
-#### Step 2
-
-Update chart so that it includes and uses the upcoming V2beta1 of the CRD
-
-```shell
+# Update chart so that it includes and uses the upcoming V2beta1 of the CRD
 helm upgrade --install example3 example3/example3b
 ```
 
