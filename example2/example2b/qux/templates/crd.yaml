@@ -1,10 +1,9 @@
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: foos.bar.com
   labels:
-    app: example2qux
+    app: {{ .Release.Name }}-crd
     release: {{ .Release.Name }}
   annotations:
     "helm.sh/hook": crd-install

@@ -1,20 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: example2baz
+  name: {{ .Release.Name }}-deployment
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: example2baz
-        release: example2
+        app: {{ .Release.Name }}-deployment
+        release: {{ .Release.Name }}
     spec:
       containers:
-        - name: example2
+        - name: {{ .Release.Name }}-deployment
           image: "nginx:1.14.0"
           imagePullPolicy: IfNotPresent
   selector:
     matchLabels:
-      app: example2baz
-      release: example2
+      app: {{ .Release.Name }}-deployment
+      release: {{ .Release.Name }}

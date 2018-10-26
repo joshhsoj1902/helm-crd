@@ -72,20 +72,12 @@ When these two steps are done in order, the second will always fail. if step 2 i
 
 ### Example 2 - Existing chart, adding new subchart
 
-#### Step 1
-
-Pre-install the umbrella chart to simulate a customer already using our chart
-
 ```shell
+# Pre-install the umbrella chart to simulate a customer already using our chart
 helm dependency build example2/example2a
 helm upgrade --install example2 example2/example2a
-```
 
-#### Step 2
-
-A customer updating an umbrella to take advantage of a new service added
-
-```shell
+# A customer updating an umbrella to take advantage of a new service added
 helm dependency build example2/example2b
 helm upgrade --install example2 example2/example2b
 ```
