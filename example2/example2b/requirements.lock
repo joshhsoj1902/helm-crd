@@ -1,0 +1,9 @@
+dependencies:
+- name: baz
+  repository: file://./baz
+  version: 0.0.1
+- name: qux
+  repository: file://./qux
+  version: 0.0.1
+digest: sha256:5adeff18face0a31445b6a524986ffc1ca3f59395587a12f76abef75cda9e241
+generated: 2018-10-26T12:12:02.073584-04:00

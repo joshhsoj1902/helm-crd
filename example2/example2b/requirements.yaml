@@ -1,0 +1,7 @@
+dependencies:
+  - name: baz
+    version: 0.0.1
+    repository: "file://./baz"
+  - name: qux
+    version: 0.0.1
+    repository: "file://./qux"

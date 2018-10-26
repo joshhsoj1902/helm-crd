@@ -1,0 +1,11 @@
+apiVersion: "bar.com/v1"
+kind: "Foo"
+metadata:
+  name: foo1
+  labels:
+    app: example1
+    chart: example1
+    release: example1
+    heritage: example1
+spec:
+  fooType: Foo1
