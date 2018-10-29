@@ -72,6 +72,8 @@ When these two steps are done in order, the second will always fail. if step 2 i
 
 ### Example 2 - Existing chart, adding new subchart
 
+In this Example, we have customers already depending on our umbrella chart. In a new version we've added a new service that adds a CRD:
+
 ```shell
 # Pre-install the umbrella chart to simulate a customer already using our chart
 helm dependency build example2/example2a
@@ -112,18 +114,25 @@ helm upgrade --install example3 example3/example3b
 
 This is a variation on many examples you see online where install steps will instruct you to install the crd using a `kubectl apply` before running the helm install. Instead it leverages helm. This is useful if multiple CRDs are required.
 
-#### Step 1
-
-Install the crd chart
-
 ```shell
 # Install the crd chart
-helm upgrade --install workaround1-crds workaround1/crds
+helm upgrade --install workaround1-crds workaround1/crds1
 
 # Install the Ubrella chart
-helm dependency build workaround1/charts
-helm upgrade --install workaround1 workaround1/charts
+helm dependency build workaround1/application1
+helm upgrade --install workaround1 workaround1/application1
 ```
+
+The advantages of this is that we can update the CRD using helm:
+
+```shell
+helm upgrade --install workaround1-crds workaround1/crds2
+```
+(The only thing updated here was the label on the crd `kubectl describe crd foos`)
+
+This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file. One danger I've noticed with this workaround is that changing the Accepted Names can result in a bad state.
+
+### Workaround 2 - No crd-install, install hooks
 
 ## TODO
 
