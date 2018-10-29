@@ -132,11 +132,23 @@ helm upgrade --install workaround1-crds workaround1/crds2
 
 This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file. One danger I've noticed with this workaround is that changing the Accepted Names can result in a bad state.
 
+### Workaround 2 - pre-hooks
+
+Pre-hooks were the go-to before the `crd-install` was added. This was my first time using them, I'm not sure what the issues with them were overall, but they seem to have a few things going for them.
+
+This workaround provides two main benefits
+- CRD can be updated with a `helm upgrade`
+- Only a single chart is required
+
+```shell
+# Install everything from scratch
+helm upgrade --install hooks hooks/hooks1
+
+# Update the crd
+helm upgrade --install hooks hooks/hooks2
+```
+
 ## TODO
-
-I would like to add an workaround using pre/post hooks. The catch using those hooks is that the CRD would need to be installed/updated using the pre-install & the pre-update hooks and all the CR's would need to be installed using the post-install and post-update hooks. I'm not a huge fan of this workaround since it means that helm doesn't really manage anything and it makes the chart more complicated then workaround1, the advantage to this method is that it's a single chart instead of 2.
-
-Some examples of using hooks: https://github.com/istio/istio/pull/7771/files  https://github.com/helm/helm/blob/master/docs/examples/nginx/templates/post-install-job.yaml
 
 There are various mentions of existing CRDs being deleted with using the `crd-install` hook. I haven't been able to replicate this, but if anyone could give me an example I would be happy to add it here. (https://github.com/helm/helm/issues/4704  )
 

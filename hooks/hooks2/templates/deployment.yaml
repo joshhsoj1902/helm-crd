@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-deployment
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-deployment
+          image: "nginx:1.14.0"
+          imagePullPolicy: IfNotPresent
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-deployment
+      release: {{ .Release.Name }}

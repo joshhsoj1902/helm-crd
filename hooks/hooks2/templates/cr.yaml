@@ -1,0 +1,11 @@
+apiVersion: "bar.com/v1"
+kind: "Foo"
+metadata:
+  name: {{ .Release.Name }}-cr
+  labels:
+    app: {{ .Release.Name }}-cr
+    chart: {{ .Release.Name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Name }}
+spec:
+  fooType: Foo1
