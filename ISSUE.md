@@ -147,10 +147,6 @@ helm upgrade --install hooks hooks/hooks1
 helm upgrade --install hooks hooks/hooks2
 ```
 
-## TODO
-
-There are various mentions of existing CRDs being deleted with using the `crd-install` hook. I haven't been able to replicate this, but if anyone could give me an example I would be happy to add it here. (https://github.com/helm/helm/issues/4704  )
-
 ## Possible solutions
 
 **Disclaimer** I haven't looked at the helm code base very closely, these are just meant as ideas.
@@ -166,8 +162,12 @@ There are various mentions of existing CRDs being deleted with using the `crd-in
 
 The main focus of these is to turn the CRD into a managed part of the chart and not just an item that is added at install time and then forgotten.
 If the CRD was managed as part of the chart it would fix a lot of confusion realted to CRDs not being updated when there are changes and not being deleted with the chart:
-https://github.com/helm/helm/issues/4840
-https://github.com/helm/helm/issues/4704
-https://github.com/helm/helm/issues/4591
-https://github.com/istio/istio/pull/8065
-https://github.com/helm/helm/issues/4697
+- https://github.com/helm/helm/issues/4840
+- https://github.com/helm/helm/issues/4704
+- https://github.com/helm/helm/issues/4591
+- https://github.com/istio/istio/pull/8065
+- https://github.com/helm/helm/issues/4697
+
+## TODO
+
+There are various mentions of existing CRDs being deleted with using the `crd-install` hook. I haven't been able to replicate this, but if anyone could give me an example I would be happy to add it here. (https://github.com/helm/helm/issues/4704  )
