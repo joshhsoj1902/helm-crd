@@ -31,62 +31,57 @@ In version `2.10` of helm a new hook [crd-install](https://github.com/helm/helm/
 Some helpful commands when running all these examples:
 
 List all installed CRDs
-
-```shell
-kubectl get crd
-```
+>kubectl get crd
 
 List all CRs (foos) installed in these examples:
-
-```shell
-kubectl get foos
-```
+>kubectl get foos
 
 Delete the CRD that is created in these examples:
-
-```shell
-kubectl delete crd foos.bar.com
-```
+> kubectl delete crd foos.bar.com
 
 Delete all installed helm charts:
-
-```shell
-helm ls --short | xargs -L1 helm delete --purge
-```
+> helm ls --short | xargs -L1 helm delete --purge
 
 ### Example 1 - Existing chart
 
-In this Example, we have customers already depending on our chart. In a new version of our service we're adding a new CRD.
+In this Example, we have users already depending on our chart. In a new version of our service we're adding a new CRD.
 
 ```shell
-# Pre-install a chart to simulate a customer already using our chart
+# Pre-install a chart to simulate a user already using our chart
 helm upgrade --install example1 example1/example1a
 
-# A customer updating their existing chart
+# A user updating their existing chart
 helm upgrade --install example1 example1/example1b
 ```
 
 #### Outcome
 
-When these two steps are done in order, the second will always fail. if step 2 is ran on it's own it'll work fine.
+When these two steps are done in order, the second will always fail.
+
+> Error: UPGRADE FAILED: failed to create resource: the server could not find the requested resource (post foos.bar.com)
+
+When step 2 is ran on it's own it'll work fine.
 
 ### Example 2 - Existing chart, adding new subchart
 
-In this Example, we have customers already depending on our umbrella chart. In a new version we've added a new service that adds a CRD:
+In this Example, we have users already depending on our umbrella chart. In a new version of the umbrella chart we've added a service that adds a CRD:
 
 ```shell
-# Pre-install the umbrella chart to simulate a customer already using our chart
+# Pre-install the umbrella chart to simulate a user already using our chart
 helm dependency build example2/example2a
 helm upgrade --install example2 example2/example2a
 
-# A customer updating an umbrella to take advantage of a new service added
+# A user updating an umbrella to take advantage of a new service added
 helm dependency build example2/example2b
 helm upgrade --install example2 example2/example2b
 ```
 
 #### Outcome
 
-When these two steps are done in order, the second will always fail meaning existing customers can't get access to the new features unless they start over.
+When these two steps are done in order, the second will always fail
+> Error: UPGRADE FAILED: failed to create resource: the server could not find the requested resource (post foos.bar.com)
+
+This means existing uers can't cleanly upgrade to the new version of the chart.
 
 ### Example 3 - Adding a new version to an existing crd
 
@@ -112,6 +107,8 @@ I haven't yet ran this, but it should fail saying that V2beta1 isn't defined.
 
 ### Workaround 1 - No crd-install, dedicated crd chart
 
+This workaround doesn't use the `crd-install`. Instead it creates a helm chart that only holds CRDs. That chart must then be installed/updated before the main chart.
+
 This is a variation on many examples you see online where install steps will instruct you to install the crd using a `kubectl apply` before running the helm install. Instead it leverages helm. This is useful if multiple CRDs are required.
 
 ```shell
@@ -130,7 +127,7 @@ helm upgrade --install workaround1-crds workaround1/crds2
 ```
 (The only thing updated here was the label on the crd `kubectl describe crd foos`)
 
-This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file. One danger I've noticed with this workaround is that changing the Accepted Names can result in a bad state.
+This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file.
 
 ### Workaround 2 - pre-hooks
 
