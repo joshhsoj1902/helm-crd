@@ -28,6 +28,8 @@ In version `2.10` of helm a new hook [crd-install](https://github.com/helm/helm/
 
 ## Examples
 
+These examples are inspired by use cases where we have one chart that creates a CRD and CRs are created as part of the same chart. In practice this is usually an umbrella chart where one subchart creates the CRD and other subcharts create CRs.
+
 Some helpful commands when running all these examples:
 
 List all installed CRDs
