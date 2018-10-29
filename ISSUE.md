@@ -90,7 +90,7 @@ When these two steps are done in order, the second will always fail meaning exis
 
 ### Example 3 - Adding a new version to an existing crd
 
-*This example requires K8s v1.11* I need to test this!!
+**This example requires K8s v1.11** I haven't tried this flow, in theory it is impacted by the same issue as example 2 (crd-install only happens at install time).
 
 This example is based off the CRD versioning details found in the [k8s docs](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definition-versioning/)
 
@@ -106,7 +106,7 @@ helm upgrade --install example3 example3/example3b
 
 #### Outcome
 
-*TODO*
+I haven't yet ran this, but it should fail saying that V2beta1 isn't defined.
 
 ## Potential workarounds
 
@@ -132,12 +132,9 @@ helm upgrade --install workaround1-crds workaround1/crds2
 
 This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file. One danger I've noticed with this workaround is that changing the Accepted Names can result in a bad state.
 
-### Workaround 2 - No crd-install, install hooks
-
 ## TODO
 
-Convert above `Steps` to just be comments in a shell code snippit
+I would like to add an workaround using pre/post hooks. The catch using those hooks is that the CRD would need to be installed/updated using the pre-install & the pre-update hooks and all the CR's would need to be installed using the post-install and post-update hooks. I'm not a huge fan of this workaround since it means that helm doesn't really manage anything and it makes the chart more complicated then workaround1, the advantage to this method is that it's a single chart instead of 2.
 
-Look into and try to create an example using hooks: https://github.com/istio/istio/pull/7771/files
+Some examples of using hooks: https://github.com/istio/istio/pull/7771/files  https://github.com/helm/helm/blob/master/docs/examples/nginx/templates/post-install-job.yaml
 
-Look into the helm v3 proposal
