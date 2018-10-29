@@ -138,3 +138,25 @@ I would like to add an workaround using pre/post hooks. The catch using those ho
 
 Some examples of using hooks: https://github.com/istio/istio/pull/7771/files  https://github.com/helm/helm/blob/master/docs/examples/nginx/templates/post-install-job.yaml
 
+There are various mentions of existing CRDs being deleted with using the `crd-install` hook. I haven't been able to replicate this, but if anyone could give me an example I would be happy to add it here. (https://github.com/helm/helm/issues/4704  )
+
+## Possible solutions
+
+**Disclaimer** I haven't looked at the helm code base very closely, these are just meant as ideas.
+
+- Have an option to skip validation for CR's.
+  - This would allow us to install managed CRD's [without the `crd-install` hook]
+  - This would fix both example 1 & 2, but it would create a race condition where the CRD would still need to be _installed_ before the CR
+  - In order for the race condition to be resolved, CRDs would need some special `wait` logic to pause the install till after they finish.
+
+- Multiple levels of validation
+  - i.e.: Validate all templates, ignore CR's. Install/update CRDs, validate CRs.
+  - If the above flow could be implemented it would allows CRDs to be managed as part of the chart and it would allow it to be updated and deleted if the chart is deleted.
+
+The main focus of these is to turn the CRD into a managed part of the chart and not just an item that is added at install time and then forgotten.
+If the CRD was managed as part of the chart it would fix a lot of confusion realted to CRDs not being updated when there are changes and not being deleted with the chart:
+https://github.com/helm/helm/issues/4840
+https://github.com/helm/helm/issues/4704
+https://github.com/helm/helm/issues/4591
+https://github.com/istio/istio/pull/8065
+https://github.com/helm/helm/issues/4697
