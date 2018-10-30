@@ -92,7 +92,7 @@ helm upgrade --install example2 example2/example2b
 When these two steps are done in order, the second will always fail
 > Error: UPGRADE FAILED: failed to create resource: the server could not find the requested resource (post foos.bar.com)
 
-This means existing uers can't cleanly upgrade to the new version of the chart as the `crd-install` hook did not run and did not install the required CRD.
+This means existing users can't cleanly upgrade to the new version of the chart as the `crd-install` hook did not run and did not install the required CRD.
 
 #### Cleanup
 
