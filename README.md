@@ -86,12 +86,13 @@ In this Example, we have users already depending on our umbrella chart. In a new
 
 |Installed state (example2a)|Desired state (example2b)|
 |---------------------------|-------------------------|
-|baz                        |baz                      |
-|- deployment               |- deployment             |
-|                           |qux                      |
-|                           |- deployment             |
-|                           |- crd                    |
-|                           |- cr                     |
+|chart                      |chart                    |
+|- baz (subchart)           |- baz (subchart)         |
+|-- deployment              |-- deployment            |
+|                           |- qux                    |
+|                           |-- deployment            |
+|                           |-- crd                   |
+|                           |-- cr                    |
 
 ```shell
 # Pre-install the umbrella chart to simulate a user already using our chart
