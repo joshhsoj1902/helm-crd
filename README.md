@@ -48,6 +48,13 @@ Delete all installed helm charts:
 
 In this Example, we have users already depending on our chart. In a new version of our service we're adding a new CRD.
 
+|Installed state (example1a)|Desired state (example1b)|
+|---------------------------|-------------------------|
+|chart                      |chart                    |
+|- deployment               |- deployment             |
+|                           |- crd                    |
+|                           |- cr                     |
+
 ```shell
 # Pre-install a chart to simulate a user already using our chart
 helm upgrade --install example1 example1/example1a
@@ -76,6 +83,16 @@ helm ls --short | xargs -L1 helm delete --purge
 ### Example 2 - Existing chart, adding new subchart
 
 In this Example, we have users already depending on our umbrella chart. In a new version of the umbrella chart we've added a service that adds a CRD:
+
+|Installed state (example2a)|Desired state (example2b)|
+|---------------------------|-------------------------|
+|chart                      |chart                    |
+|- baz (subchart)           |- baz (subchart)         |
+|-- deployment              |-- deployment            |
+|                           |- qux                    |
+|                           |-- deployment            |
+|                           |-- crd                   |
+|                           |-- cr                    |
 
 ```shell
 # Pre-install the umbrella chart to simulate a user already using our chart
@@ -109,7 +126,12 @@ helm ls --short | xargs -L1 helm delete --purge
 
 This example is based off the CRD versioning details found in the [k8s docs](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definition-versioning/)
 
-#### Step 1
+|Installed state (example3a)|Desired state (example3b)|
+|---------------------------|-------------------------|
+|chart                      |chart                    |
+|- deployment               |- deployment             |
+|- crd                      |- crd (updated)          |
+|- cr                       |- cr                     |
 
 ```shell
 # Pre-Install chart with V1 of the CRD
