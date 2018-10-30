@@ -58,11 +58,20 @@ helm upgrade --install example1 example1/example1b
 
 #### Outcome
 
-When these two steps are done in order, the second will always fail.
+When these two steps are done in order, the second will always fail because the `crd-install` hook isn't ran on upgrade.
 
 > Error: UPGRADE FAILED: failed to create resource: the server could not find the requested resource (post foos.bar.com)
 
 When step 2 is ran on it's own it'll work fine.
+
+#### Cleanup
+
+Remove the chart and CRD
+
+```shell
+kubectl delete crd foos.bar.com
+helm ls --short | xargs -L1 helm delete --purge
+```
 
 ### Example 2 - Existing chart, adding new subchart
 
@@ -83,9 +92,18 @@ helm upgrade --install example2 example2/example2b
 When these two steps are done in order, the second will always fail
 > Error: UPGRADE FAILED: failed to create resource: the server could not find the requested resource (post foos.bar.com)
 
-This means existing uers can't cleanly upgrade to the new version of the chart.
+This means existing uers can't cleanly upgrade to the new version of the chart as the `crd-install` hook did not run and did not install the required CRD.
 
-### Example 3 - Adding a new version to an existing crd
+#### Cleanup
+
+Remove the chart and CRD
+
+```shell
+kubectl delete crd foos.bar.com
+helm ls --short | xargs -L1 helm delete --purge
+```
+
+### Example 3 - Adding a new version to an existing CRD
 
 **This example requires K8s v1.11** I haven't tried this flow, in theory it is impacted by the same issue as example 2 (crd-install only happens at install time).
 
@@ -107,14 +125,14 @@ I haven't yet ran this, but it should fail saying that V2beta1 isn't defined.
 
 ## Potential workarounds
 
-### Workaround 1 - No crd-install, dedicated crd chart
+### Workaround 1 - No crd-install, dedicated CRD chart
 
 This workaround doesn't use the `crd-install`. Instead it creates a helm chart that only holds CRDs. That chart must then be installed/updated before the main chart.
 
-This is a variation on many examples you see online where install steps will instruct you to install the crd using a `kubectl apply` before running the helm install. Instead it leverages helm. This is useful if multiple CRDs are required.
+This is a variation on many examples you see online where install steps will instruct you to install the CRD using a `kubectl apply` before running the helm install. Instead it leverages helm. This is useful if multiple CRDs are required.
 
 ```shell
-# Install the crd chart
+# Install the CRD chart
 helm upgrade --install workaround1-crds workaround1/crds1
 
 # Install the Ubrella chart
@@ -127,9 +145,19 @@ The advantages of this is that we can update the CRD using helm:
 ```shell
 helm upgrade --install workaround1-crds workaround1/crds2
 ```
-(The only thing updated here was the label on the crd `kubectl describe crd foos`)
+(The only thing updated here was the label on the CRD `kubectl describe crd foos`)
 
 This becomes more important in 1.11 where multiple versions of a CRD can be defined in a single file.
+
+#### Pros
+
+- CRDs managed by helm
+- CRDs can be installed/updated at any point in the charts lifecycle
+
+#### Cons
+
+- Unable to package everything into a single chart
+- Other charts can't use us as a subchart without also running our crd chart first.
 
 ### Workaround 2 - pre-hooks
 
@@ -143,9 +171,20 @@ This workaround provides two main benefits
 # Install everything from scratch
 helm upgrade --install hooks hooks/hooks1
 
-# Update the crd
+# Update the CRD
 helm upgrade --install hooks hooks/hooks2
 ```
+
+#### Pros
+
+- Everything is bundled into a single chart
+- CRDs can be installed/updated at any point in the charts lifecycle
+
+#### Cons
+
+- Helm doesn't manage the CRDs (No helm rollbacks)
+- Issues with hooks are harder for a user to detect/debug
+- The developer needs to have a good understanding of how all the [helm hooks](https://github.com/helm/helm/blob/master/docs/charts_hooks.md#the-available-hooks) work
 
 ## Possible solutions
 
