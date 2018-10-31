@@ -1,5 +1,7 @@
 # Issue
 
+I made a repo that holds the files for all these examples. It can be found [here](https://github.com/joshhsoj1902/helm-crd)
+
 <!-- If you need help or think you have found a bug, please help us with your issue by entering the following information (otherwise you can delete this text): -->
 
 Output of `helm version`:
@@ -27,6 +29,8 @@ Helm is unable to handle the lifecycle of a [CustomResourceDefinition](https://k
 In version `2.10` of helm a new hook [crd-install](https://github.com/helm/helm/pull/3982) was added (Docs [here](https://github.com/helm/helm/blob/master/docs/charts_hooks.md#defining-a-crd-with-the-crd-install-hook)). This hook solves the validation issue, but as technosphos suggests in the [original pr](https://github.com/helm/helm/pull/3982) `Currently, this hook is only implemented for install`. This was a great start, but I worry that there are some implications that back us into a corner. I'm going to run through a few examples to try to show case where the current approach gets us stuck.
 
 ## Examples
+
+**The repo that holds the files for these examples can be found [here](https://github.com/joshhsoj1902/helm-crd)**
 
 These examples are inspired by use cases where we have one chart that creates a CRD and CRs are created as part of the same chart. In practice this is usually an umbrella chart where one subchart creates the CRD and other subcharts create CRs.
 
@@ -89,7 +93,7 @@ In this Example, we have users already depending on our umbrella chart. In a new
 |chart                      |chart                    |
 |- baz (subchart)           |- baz (subchart)         |
 |-- deployment              |-- deployment            |
-|                           |- qux                    |
+|                           |- qux (subchart)         |
 |                           |-- deployment            |
 |                           |-- crd                   |
 |                           |-- cr                    |
